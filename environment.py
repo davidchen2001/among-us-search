@@ -27,7 +27,7 @@ class PriorityQueue:
 #Node that stores a grid positions information
 class Node:
     def __init__(self, val, cords, neighbours):
-        self.val = val                  #Stores value of location ("O" or "T")
+        self.val = val                  
         self.x = cords[0]
         self.y = cords[1] 
         self.name = cords               #Stores coordinates of location
@@ -62,6 +62,8 @@ class Graph:
         self.width = n              #Gets width of grid
         self.height = d             #Gets height of matrix
         self.treasure_cords = []
+        self.agents = []
+
         #Get location information to create Nodes for the Graph, i.e neighbours of location, location value
         for x, y in np.ndindex(matrix.shape):
             neighbours = []
@@ -104,3 +106,14 @@ class Graph:
                 print("T still exists")
                 return
         print("T does not exist")   
+    
+    def get_agent_locations(self):
+        locations = []
+
+        for i in range(len(self.agents)):
+            locations.append(self.agents.getNode())
+
+        return locations 
+
+    def set_agents(self, agents):
+        self.agents = agents 
