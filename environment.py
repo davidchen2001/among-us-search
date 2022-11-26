@@ -58,19 +58,19 @@ class Graph:
     def __init__(self,matrix):
         n,d = matrix.shape
         self.nodes = []             #Stores all locations
-        self.treasure_count = 0     #Stores number of treasures in grid
+        self.task_count = 0     #Stores number of tasks in grid
         self.width = n              #Gets width of grid
         self.height = d             #Gets height of matrix
-        self.treasure_cords = []
+        self.task_cords = []
         self.agents = []
 
         #Get location information to create Nodes for the Graph, i.e neighbours of location, location value
         for x, y in np.ndindex(matrix.shape):
             neighbours = []
-            #Count treasures for treasure_count
+            #Count tasks for task_count
             if matrix[x,y] == 'T':
-                self.treasure_count += 1
-                self.treasure_cords.append((x,y))
+                self.task_count += 1
+                self.task_cords.append((x,y))
 
             possible_neighbors = [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]
             if x+1>=n:
@@ -85,11 +85,11 @@ class Graph:
             node = Node(matrix[x,y],(x,y),neighbours)
             self.nodes.append(node)
 
-    def get_treasure_cords(self):
-        return self.treasure_cords
+    def get_task_cords(self):
+        return self.task_cords
     
-    def remove_treasure_cords(self,cords):
-        self.treasure_cords.remove(cords)
+    def remove_task_cords(self,cords):
+        self.task_cords.remove(cords)
 
     def print_graph_deets(self):
         for node in self.nodes:
