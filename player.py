@@ -13,6 +13,7 @@ class Agent:
 class Crewmate(Agent):
     def __init__(self, node):
         Agent.__init__(node)
+        self.alive = True 
 
     def heuristic(self, tasks):
         new_tasks = list.copy(tasks)
@@ -31,6 +32,12 @@ class Crewmate(Agent):
         
         #return h(n) = #of tasks remaining + mininimum manhattan
         return len(self.currNode) + min(distances)
+    
+    def get_alive(self):
+        return self.alive
+    
+    def set_alive(self, val):
+        self.alive = val
 
 class Killer(Agent):
     
