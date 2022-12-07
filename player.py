@@ -12,7 +12,7 @@ class Agent:
 
 class Crewmate(Agent):
     def __init__(self, node):
-        Agent.__init__(node)
+        Agent.__init__(self, node)
         self.alive = True 
 
     def heuristic(self, tasks):
@@ -42,7 +42,7 @@ class Crewmate(Agent):
 class Killer(Agent):
     
     def __init__(self, node):
-        Agent.__init__(node)
+        Agent.__init__(self, node)
 
     def heuristic(self, crewmates):
         surviving_crewmates = list.copy(crewmates)

@@ -3,14 +3,18 @@ from player import Crewmate, Killer
 
 import numpy as np
 
-def initialize_agents():
+def initialize_crewmates(node):
     crewmates = []
 
     for i in range(4):
-        crewmates.append(Crewmate())
+        crewmates.append(Crewmate(node))
     
-    killer = Killer()
-    return crewmates, killer
+    return crewmates
+
+def initialize_killer(node):
+
+    killer = Killer(node)
+    return killer
 
 #load_data from a csv_file into a numpy matrix
 #csv_file represents 
@@ -20,7 +24,6 @@ def load_data(csv_file):
     return data
 
 def pathfinding(input):
-    crewmates, killer = initialize_agents()
 
     data = load_data(input)
     grid = Graph(data)
@@ -32,6 +35,8 @@ def pathfinding(input):
     crewmates_path = []
     remaining_crewmates = 4
     start_node = grid.get_node((0,0))
+    crewmates = initialize_crewmates(start_node)
+    killer = initialize_killer(start_node)
 
     for i in range(4):
 
@@ -112,10 +117,10 @@ def pathfinding(input):
                         )
 
             else:
-                if len(crewmate_queue[i]) == 0:
+                if len(crewmates_queues[i]) == 0:
                     return False 
                 
-                currNode = crewmate_queue[i].pop()
+                currNode = crewmates_queues[i].pop()
                 task_state = list.copy(currNode[1])
                 node_information = grid.get_node(str(currNode[0]))
 
@@ -156,3 +161,5 @@ def pathfinding(input):
                             neighbour,
                             fn
                         )
+
+pathfinding("./Test.csv")
