@@ -19,7 +19,7 @@ class Crewmate(Agent):
         new_tasks = list.copy(tasks)
 
         if self.currNode in new_tasks:
-            new_tasks.remove(self.currNode)
+            new_tasks.remove(node)
 
         distances = []
 

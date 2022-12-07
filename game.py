@@ -80,6 +80,9 @@ def pathfinding(input):
                     crewmates[i].set_alive(False)
                     remaining_crewmates -= 1
                 
+                print("Remaining crewmates")
+                print(remaining_crewmates)
+
                 if remaining_crewmates == 0:
                     optimal_path_cost = currNode[2]
                     return killer_path, optimal_path_cost, "killer"
@@ -121,17 +124,16 @@ def pathfinding(input):
                     return False 
                 
                 currNode = crewmates_queues[i].pop()
-                task_state = list.copy(currNode[1])
                 node_information = grid.get_node(str(currNode[0]))
 
-                if (currNode[0] in currNode[1]):
-                    task_state.remove(currNode[0])
+                if (currNode[0] in grid.get_task_cords()):
+                    grid.remove_task_cords(currNode[0])
                 
-                if len(task_state) == 0:
+                if len(grid.get_task_cords()) == 0:
                     return "crewmate"
 
-                crewmates_explored[i].append([currNode[0], list.copy(task_state)])
-                currNode[1] = list.copy(task_state)
+                crewmates_explored[i].append([currNode[0], list.copy(grid.get_task_cords())])
+                currNode[1] = list.copy(grid.get_task_cords())
                 crewmates_path[i].append(currNode)
 
                 curr_path_cost = 1 + currNode[2]
@@ -140,20 +142,20 @@ def pathfinding(input):
                     neighbour_node = grid.get_node(node)
 
                     #Create neighbour for adding to frontier
-                    neighbour = [neighbour_node.get_loc(), list.copy(task_state), curr_path_cost, [currNode[0], list.copy(task_state)]]
+                    neighbour = [neighbour_node.get_loc(), list.copy(grid.get_task_cords()), curr_path_cost, [currNode[0], list.copy(grid.get_task_cords())]]
 
                     #Check if neighbour with treasure state already exists in paths to get old_path_cost for next if statement
                     old_path_cost = 0
                     for x in paths:
-                        if x[0] == neighbour_node.get_loc() and x[1] == task_state:
+                        if x[0] == neighbour_node.get_loc() and x[1] == grid.get_task_cords():
                             old_path_cost = x[2]
 
                     #Check if neighbour with treasure state is not in explored or if the current path is smaller than the previous neighbour with same treausre states path
                     #If if statement passes, add to frontier
-                    if (([neighbour[0], task_state] not in explored) 
+                    if (([neighbour[0], grid.get_task_cords()] not in explored) 
                     or (curr_path_cost < old_path_cost)):
                         #Calculate f(n) of current location+treasure_state
-                        fn = curr_path_cost + crewmates[i].heuristic(neighbour[0], task_state)
+                        fn = curr_path_cost + crewmates[i].heuristic(neighbour[0], grid.get_task_cords())
                         neighbour.append(fn)
 
                         #Add to priority queue, with fn defining it's priority
@@ -162,4 +164,3 @@ def pathfinding(input):
                             fn
                         )
 
-pathfinding("./Test.csv")
