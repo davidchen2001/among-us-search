@@ -107,7 +107,7 @@ def pathfinding(input):
                     if (([neighbour[0], agent_state] not in explored) 
                     or (curr_path_cost < old_path_cost)):
                         #Calculate f(n) of current location+treasure_state
-                        fn = curr_path_cost + killer.heuristic(agent_state)
+                        fn = curr_path_cost + killer.heuristic(neighbour[0], agent_state, remaining_crewmates)
                         neighbour.append(fn)
 
                         #Add to priority queue, with fn defining it's priority
@@ -153,7 +153,7 @@ def pathfinding(input):
                     if (([neighbour[0], task_state] not in explored) 
                     or (curr_path_cost < old_path_cost)):
                         #Calculate f(n) of current location+treasure_state
-                        fn = curr_path_cost + crewmates[i].heuristic(task_state)
+                        fn = curr_path_cost + crewmates[i].heuristic(neighbour[0], task_state)
                         neighbour.append(fn)
 
                         #Add to priority queue, with fn defining it's priority
