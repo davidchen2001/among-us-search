@@ -110,7 +110,7 @@ class Graph:
     def get_agents(self):
         return self.agents
 
-    def get_agent_locations(self):
+    def get_crewmate_locations(self):
         locations = []
 
         for i in range(len(self.agents)):

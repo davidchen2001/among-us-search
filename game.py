@@ -38,9 +38,8 @@ def pathfinding(input):
     killer = initialize_killer(start_node)
 
     grid.set_agents(crewmates)
-    grid.append_agent(killer)
 
-    agent_locations = grid.get_agent_locations()
+    crewmate_locations = grid.get_crewmate_locations()
 
     for i in range(remaining_crewmates):
 
@@ -58,7 +57,7 @@ def pathfinding(input):
     killer_explored = []
     killer_path = []
     start_node = grid.get_node((0,0))
-    killer_queue.add([start_node.get_loc(), list.copy(agent_locations), 0, [], None])
+    killer_queue.add([start_node.get_loc(), list.copy(crewmate_locations), 0, [], None])
 
     while True:
 
@@ -74,22 +73,29 @@ def pathfinding(input):
 
                 #Check if killer collided with crewmate
                 num_collisions = 0
-                for j in range(len(grid.get_agent_locations())):
-                    if grid.get_agent_locations()[j] == currNode[0]:
+                for j in range(len(grid.get_crewmate_locations())):
+                    if grid.get_crewmate_locations()[j] == currNode[0]:
                         num_collisions += 1
+                        print("COLLISON")
+                        #crewmates[i].set_alive(False)
+                        grid.remove_agent(crewmates[i])
+                        remaining_crewmates -= 1
                 
                 #num_collisions should be two since killer's location is also collected
                 if num_collisions == 2:
+                    print("REMOVE")
                     #Remove agent from the map
                     crewmates[i].set_alive(False)
                     grid.remove_agent(crewmates[i])
                     remaining_crewmates -= 1
 
+                print(remaining_crewmates)
+
                 if remaining_crewmates == 0:
                     optimal_path_cost = currNode[2]
                     return killer_path, optimal_path_cost, "killer"
 
-                killer_explored.append([currNode[0], list.copy(grid.get_agent_locations())])
+                killer_explored.append([currNode[0], list.copy(grid.get_crewmate_locations())])
                 #currNode[1] = list.copy(agent_state)
                 killer_path.append(currNode)
 
@@ -99,21 +105,21 @@ def pathfinding(input):
                     neighbour_node = grid.get_node(node)
 
                     #Create neighbour for adding to frontier
-                    neighbour = [neighbour_node.get_loc(), list.copy(grid.get_agent_locations()), curr_path_cost, [currNode[0], list.copy(grid.get_agent_locations())]]
+                    neighbour = [neighbour_node.get_loc(), list.copy(grid.get_crewmate_locations()), curr_path_cost, [currNode[0], list.copy(grid.get_crewmate_locations())]]
 
                     #Check if neighbour with treasure state already exists in paths to get old_path_cost for next if statement
                     old_path_cost = 0
                     for x in paths:
-                        if x[0] == neighbour_node.get_loc() and x[1] == grid.get_agent_locations():
+                        if x[0] == neighbour_node.get_loc() and x[1] == grid.get_crewmate_locations():
                             old_path_cost = x[2]
 
                     #Check if neighbour with treasure state is not in explored or if the current path is smaller than the previous neighbour with same treausre states path
                     #If if statement passes, add to frontier
-                    if (([neighbour[0], grid.get_agent_locations()] not in explored) 
+                    if (([neighbour[0], grid.get_crewmate_locations()] not in explored) 
                     or (curr_path_cost < old_path_cost)):
                         #Calculate f(n) of current location+treasure_state
                         
-                        fn = curr_path_cost + killer.heuristic(neighbour[0], grid.get_agent_locations(), remaining_crewmates)
+                        fn = curr_path_cost + killer.heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
                         neighbour.append(fn)
 
                         #Add to priority queue, with fn defining it's priority
