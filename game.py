@@ -79,6 +79,38 @@ def pathfinding(input):
                     optimal_path_cost = currNode[2]
                     return killer_path, optimal_path_cost, "killer"
 
+                killer_explored.append([currNode[0], list.copy(agent_state)])
+                currNode[1] = list.copy(agent_state)
+                killer_path.append(currNode)
+
+                curr_path_cost = 1 + currNode[2]
+
+                for node in node_information.neighbours:
+                    neighbour_node = grid.get_node(node)
+
+                    #Create neighbour for adding to frontier
+                    neighbour = [neighbour_node.get_loc(), list.copy(agent_state), curr_path_cost, [currNode[0], list.copy(agent_state)]]
+
+                    #Check if neighbour with treasure state already exists in paths to get old_path_cost for next if statement
+                    old_path_cost = 0
+                    for x in paths:
+                        if x[0] == neighbour_node.get_loc() and x[1] == agent_state:
+                            old_path_cost = x[2]
+
+                    #Check if neighbour with treasure state is not in explored or if the current path is smaller than the previous neighbour with same treausre states path
+                    #If if statement passes, add to frontier
+                    if (([neighbour[0], agent_state] not in explored) 
+                    or (curr_path_cost < old_path_cost)):
+                        #Calculate f(n) of current location+treasure_state
+                        fn = curr_path_cost + killer.heuristic(agent_state)
+                        neighbour.append(fn)
+
+                        #Add to priority queue, with fn defining it's priority
+                        killer_queue.add(
+                            neighbour,
+                            fn
+                        )
+
             else:
                 if len(crewmate_queue[i]) == 0:
                     return False 
@@ -124,18 +156,3 @@ def pathfinding(input):
                             neighbour,
                             fn
                         )
-
-                
-
-
-
-            
-
-
-
-
-
-    
-
-
-    
