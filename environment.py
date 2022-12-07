@@ -91,7 +91,7 @@ class Graph:
     def remove_task_cords(self,cords):
         self.task_cords.remove(cords)
 
-    def print_graph_deets(self):
+    def print_graph_details(self):
         for node in self.nodes:
             node.print_node_details()
 
@@ -114,7 +114,7 @@ class Graph:
         locations = []
 
         for i in range(len(self.agents)):
-            locations.append(self.agents[i].getNode())
+            locations.append(self.agents[i].getNode().get_loc())
 
         return locations 
 

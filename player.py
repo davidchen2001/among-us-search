@@ -33,6 +33,9 @@ class Crewmate(Agent):
         #return h(n) = #of tasks remaining + mininimum manhattan
         return len(new_tasks) + min(distances)
     
+    def getNode(self):
+        return Agent.getNode(self)
+
     def get_alive(self):
         return self.alive
     
@@ -44,18 +47,13 @@ class Killer(Agent):
     def __init__(self, node):
         Agent.__init__(self, node)
 
-    def heuristic(self, node, crewmates, remaining_crewmates):
-        surviving_crewmates = list.copy(crewmates)
-
-        #TODO: Implement Kill Function
-
-        #if self.currNode.getX() == :
-        #    new_tasks.remove(self.currNode)
+    def heuristic(self, node, crewmates_locations, remaining_crewmates):
+        surviving_crewmates = list.copy(crewmates_locations)
 
         distances = []
 
-        for crewmate in surviving_crewmates:
-            distances.append(abs(crewmate.getNode()[0]-node[0]) + abs(crewmate.getNode()[1]-node[1]))
+        for crewmate_location in surviving_crewmates:
+            distances.append(abs(crewmate_location[0] - node[0]) + abs(crewmate_location[1] - node[1]))
     
         #Goal state achieved if no crewmates remain
         if len(distances) == 0:
@@ -63,6 +61,9 @@ class Killer(Agent):
         
         #return h(n) = #of crewmates remaining + mininimum manhattan
         return remaining_crewmates + min(distances)
+    
+    def getNode(self):
+        return Agent.getNode(self)
 
 
 

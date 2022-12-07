@@ -28,7 +28,6 @@ def pathfinding(input):
     data = load_data(input)
     grid = Graph(data)
     task_locations = grid.get_task_cords()
-    agent_locations = grid.get_agent_locations()
 
     crewmates_queues = []
     crewmates_explored = []
@@ -38,7 +37,12 @@ def pathfinding(input):
     crewmates = initialize_crewmates(start_node)
     killer = initialize_killer(start_node)
 
-    for i in range(4):
+    grid.set_agents(crewmates)
+    grid.append_agent(killer)
+
+    agent_locations = grid.get_agent_locations()
+
+    for i in range(remaining_crewmates):
 
         crewmate_queue = PriorityQueue()
         crewmate_queue.add([start_node.get_loc(), list.copy(task_locations), 0, [], None])
@@ -58,37 +62,35 @@ def pathfinding(input):
 
     while True:
 
-        for i in range(5):
+        for i in range(remaining_crewmates+1):
 
-            if i == 4: 
+            if i == remaining_crewmates: 
                 if len(killer_queue) == 0:
                     return False
                 
                 currNode = killer_queue.pop()
-                agent_state = list.copy(currNode[1])
+                #agent_state = list.copy(currNode[1])
                 node_information = grid.get_node(str(currNode[0]))
 
                 #Check if killer collided with crewmate
                 num_collisions = 0
-                for j in range(len(agent_state)):
-                    if agent_state[j] == currNode[0] and crewmates[i].get_alive()==True:
+                for j in range(len(grid.get_agent_locations())):
+                    if grid.get_agent_locations()[j] == currNode[0]:
                         num_collisions += 1
                 
                 #num_collisions should be two since killer's location is also collected
                 if num_collisions == 2:
                     #Remove agent from the map
                     crewmates[i].set_alive(False)
+                    grid.remove_agent(crewmates[i])
                     remaining_crewmates -= 1
-                
-                print("Remaining crewmates")
-                print(remaining_crewmates)
 
                 if remaining_crewmates == 0:
                     optimal_path_cost = currNode[2]
                     return killer_path, optimal_path_cost, "killer"
 
-                killer_explored.append([currNode[0], list.copy(agent_state)])
-                currNode[1] = list.copy(agent_state)
+                killer_explored.append([currNode[0], list.copy(grid.get_agent_locations())])
+                #currNode[1] = list.copy(agent_state)
                 killer_path.append(currNode)
 
                 curr_path_cost = 1 + currNode[2]
@@ -97,20 +99,21 @@ def pathfinding(input):
                     neighbour_node = grid.get_node(node)
 
                     #Create neighbour for adding to frontier
-                    neighbour = [neighbour_node.get_loc(), list.copy(agent_state), curr_path_cost, [currNode[0], list.copy(agent_state)]]
+                    neighbour = [neighbour_node.get_loc(), list.copy(grid.get_agent_locations()), curr_path_cost, [currNode[0], list.copy(grid.get_agent_locations())]]
 
                     #Check if neighbour with treasure state already exists in paths to get old_path_cost for next if statement
                     old_path_cost = 0
                     for x in paths:
-                        if x[0] == neighbour_node.get_loc() and x[1] == agent_state:
+                        if x[0] == neighbour_node.get_loc() and x[1] == grid.get_agent_locations():
                             old_path_cost = x[2]
 
                     #Check if neighbour with treasure state is not in explored or if the current path is smaller than the previous neighbour with same treausre states path
                     #If if statement passes, add to frontier
-                    if (([neighbour[0], agent_state] not in explored) 
+                    if (([neighbour[0], grid.get_agent_locations()] not in explored) 
                     or (curr_path_cost < old_path_cost)):
                         #Calculate f(n) of current location+treasure_state
-                        fn = curr_path_cost + killer.heuristic(neighbour[0], agent_state, remaining_crewmates)
+                        
+                        fn = curr_path_cost + killer.heuristic(neighbour[0], grid.get_agent_locations(), remaining_crewmates)
                         neighbour.append(fn)
 
                         #Add to priority queue, with fn defining it's priority
@@ -165,3 +168,4 @@ def pathfinding(input):
                         )
 
 
+print(pathfinding("./Test.csv"))
