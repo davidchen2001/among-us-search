@@ -60,6 +60,7 @@ def pathfinding(input):
     killer_queue.add([start_node.get_loc(), list.copy(crewmate_locations), 0, [], None])
 
     while True:
+        crewmates = grid.get_agents()
 
         for i in range(remaining_crewmates+1):
 
@@ -76,20 +77,11 @@ def pathfinding(input):
                 for j in range(len(grid.get_crewmate_locations())):
                     if grid.get_crewmate_locations()[j] == currNode[0]:
                         num_collisions += 1
-                        print("COLLISON")
-                        #crewmates[i].set_alive(False)
-                        grid.remove_agent(crewmates[i])
+                        crewmate_at_location = grid.get_crewmate_at_location(grid.get_crewmate_locations()[j])
+                        crewmate_at_location.set_alive(False)
+                        grid.remove_agent(crewmate_at_location)
                         remaining_crewmates -= 1
-                
-                #num_collisions should be two since killer's location is also collected
-                if num_collisions == 2:
-                    print("REMOVE")
-                    #Remove agent from the map
-                    crewmates[i].set_alive(False)
-                    grid.remove_agent(crewmates[i])
-                    remaining_crewmates -= 1
-
-                print(remaining_crewmates)
+                        break 
 
                 if remaining_crewmates == 0:
                     optimal_path_cost = currNode[2]
