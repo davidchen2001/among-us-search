@@ -107,13 +107,22 @@ class Graph:
                 return
         print("T does not exist")   
     
+    def get_agents(self):
+        return self.agents
+
     def get_agent_locations(self):
         locations = []
 
         for i in range(len(self.agents)):
-            locations.append(self.agents.getNode())
+            locations.append(self.agents[i].getNode())
 
         return locations 
 
     def set_agents(self, agents):
         self.agents = agents 
+    
+    def append_agent(self, agent):
+        self.agents.append(agent)
+    
+    def remove_agent(self,agent):
+        self.agents.remove(agent)
