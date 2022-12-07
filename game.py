@@ -23,6 +23,27 @@ def load_data(csv_file):
     #data represents numpy matrix being returned
     return data
 
+#Get the path to the node specified from the origin (0,0)
+#currNode is the nodes path being searched
+#paths is an array of all explored (location, state, parent)
+#cost is the cost to get to currNode
+def getPath(currNode, paths, cost):
+    final_path = [currNode[0]]
+    countdown = cost
+    parent = currNode[3]
+    #Loops through nodes in path, searching for the parent nodes parent to create a path
+    while countdown > 0:
+        for x in paths:
+            if x[0] == parent[0] and x[1] == parent[1] and x[2] == countdown-1:
+                final_path.append(x[0])
+                parent = x[3]
+                countdown -=1
+                break
+    
+    final_path.reverse()
+    #return array representing path to get to currNode
+    return final_path
+
 def pathfinding(input):
 
     data = load_data(input)
@@ -69,7 +90,6 @@ def pathfinding(input):
                     return False
                 
                 currNode = killer_queue.pop()
-                #agent_state = list.copy(currNode[1])
                 node_information = grid.get_node(str(currNode[0]))
 
                 #Check if killer collided with crewmate
@@ -85,10 +105,10 @@ def pathfinding(input):
 
                 if remaining_crewmates == 0:
                     optimal_path_cost = currNode[2]
-                    return killer_path, optimal_path_cost, "killer"
+                    killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
+                    return killer_optimal_path, optimal_path_cost, "killer wins"
 
                 killer_explored.append([currNode[0], list.copy(grid.get_crewmate_locations())])
-                #currNode[1] = list.copy(agent_state)
                 killer_path.append(currNode)
 
                 curr_path_cost = 1 + currNode[2]
@@ -131,7 +151,7 @@ def pathfinding(input):
                     grid.remove_task_cords(currNode[0])
                 
                 if len(grid.get_task_cords()) == 0:
-                    return "crewmate"
+                    return "crewmate wins"
 
                 crewmates_explored[i].append([currNode[0], list.copy(grid.get_task_cords())])
                 currNode[1] = list.copy(grid.get_task_cords())
@@ -164,6 +184,4 @@ def pathfinding(input):
                             neighbour,
                             fn
                         )
-
-
-print(pathfinding("./Test.csv"))
+                        
