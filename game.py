@@ -44,6 +44,64 @@ def getPath(currNode, paths, cost):
     #return array representing path to get to currNode
     return final_path
 
+def killer_traversal(killer_queue, grid, remaining_crewmates, killer_explored, killer_path, killer):
+
+    if len(killer_queue) == 0:
+        return False
+                
+    currNode = killer_queue.pop()
+    node_information = grid.get_node(str(currNode[0]))
+
+    #Check if killer collided with crewmate
+    num_collisions = 0
+    for j in range(len(grid.get_crewmate_locations())):
+        if grid.get_crewmate_locations()[j] == currNode[0]:
+                num_collisions += 1
+                crewmate_at_location = grid.get_crewmate_at_location(grid.get_crewmate_locations()[j])
+                crewmate_at_location.set_alive(False)
+                grid.remove_agent(crewmate_at_location)
+                remaining_crewmates -= 1
+                grid.append_crewmates_death(grid.get_crewmate_locations()[j])
+                break 
+
+        if remaining_crewmates == 0:
+            optimal_path_cost = currNode[2]
+            killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
+            return killer_optimal_path, optimal_path_cost, "killer wins"
+
+        killer_explored.append([currNode[0], list.copy(grid.get_crewmate_locations())])
+        killer_path.append(currNode)
+
+        curr_path_cost = 1 + currNode[2]
+
+        for node in node_information.neighbours:
+            neighbour_node = grid.get_node(node)
+
+            #Create neighbour for adding to frontier
+            neighbour = [neighbour_node.get_loc(), list.copy(grid.get_crewmate_locations()), curr_path_cost, [currNode[0], list.copy(grid.get_crewmate_locations())]]
+
+            #Check if neighbour with treasure state already exists in paths to get old_path_cost for next if statement
+            old_path_cost = 0
+            for x in killer_path:
+                if x[0] == neighbour_node.get_loc() and x[1] == grid.get_crewmate_locations():
+                    old_path_cost = x[2]
+
+            #Check if neighbour with treasure state is not in explored or if the current path is smaller than the previous neighbour with same treausre states path
+            #If if statement passes, add to frontier
+            if (([neighbour[0], grid.get_crewmate_locations()] not in killer_explored) 
+                or (curr_path_cost < old_path_cost)):
+                
+                #Calculate f(n) of current location+treasure_state
+                        
+                fn = curr_path_cost + killer.heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
+                neighbour.append(fn)
+
+                #Add to priority queue, with fn defining it's priority
+                killer_queue.add(
+                    neighbour,
+                    fn
+                )
+
 def pathfinding(input):
 
     data = load_data(input)
@@ -54,7 +112,7 @@ def pathfinding(input):
     crewmates_explored = []
     crewmates_path = []
     remaining_crewmates = 4
-    start_node = grid.get_node((0,0))
+    start_node = grid.get_node((1,0))
     crewmates = initialize_crewmates(start_node)
     killer = initialize_killer(start_node)
 
