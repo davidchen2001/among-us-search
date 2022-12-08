@@ -115,7 +115,7 @@ class Graph:
         locations = []
 
         for i in range(len(self.agents)):
-            locations.append(self.agents[i].getNode().get_loc())
+            locations.append(self.agents[i].getNode())
 
         return locations
 

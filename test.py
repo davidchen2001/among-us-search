@@ -4,7 +4,6 @@ from game import pathfinding
 #hn f(n)= h(n)
 
 print(pathfinding("./Maps/Polus.csv", 4, "fn"))
-#print(pathfinding("./Maps/Polus.csv", 4, "hn"))
 print(pathfinding("./Maps/Skeld.csv", 4, "fn"))
 print(pathfinding("./Maps/Test0.csv", 4, "fn"))
 print(pathfinding("./Maps/Test1.csv", 4, "fn"))

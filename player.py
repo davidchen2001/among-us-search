@@ -1,4 +1,4 @@
-from environment import Node
+from environment import Node, PriorityQueue
 
 class Agent:
     def __init__(self, node):
@@ -14,6 +14,9 @@ class Crewmate(Agent):
     def __init__(self, node):
         Agent.__init__(self, node)
         self.alive = True 
+        self.queue = PriorityQueue()
+        self.explored = []
+        self.path = []
 
     def heuristic(self, node, tasks):
         new_tasks = list.copy(tasks)
@@ -41,6 +44,29 @@ class Crewmate(Agent):
     
     def set_alive(self, val):
         self.alive = val
+    
+    def get_queue(self):
+        return self.queue
+    
+    def append_to_queue(self, node, priority=0):
+        self.queue.add(node, priority)
+    
+    def pop_from_queue(self):
+        return self.queue.pop()
+    
+    def get_explored(self):
+        return self.explored
+    
+    def append_to_explored(self, node):
+        self.explored.append(node)
+    
+    def get_path(self):
+        return self.path
+    
+    def append_to_path(self, node):
+        self.path.append(node)
+
+
 
 class Killer(Agent):
     
@@ -49,10 +75,12 @@ class Killer(Agent):
 
     def heuristic(self, node, crewmates_locations, remaining_crewmates):
         surviving_crewmates = list.copy(crewmates_locations)
+        print(len(surviving_crewmates))
 
         distances = []
 
         for crewmate_location in surviving_crewmates:
+            print(crewmate_location)
             distances.append(abs(crewmate_location[0] - node[0]) + abs(crewmate_location[1] - node[1]))
     
         #Goal state achieved if no crewmates remain
