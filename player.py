@@ -21,8 +21,8 @@ class Crewmate(Agent):
     def heuristic(self, node, tasks):
         new_tasks = list.copy(tasks)
 
-        if self.currNode in new_tasks:
-            new_tasks.remove(node)
+        #if self.currNode in new_tasks:
+            #new_tasks.remove(node)
 
         distances = []
 
@@ -75,12 +75,12 @@ class Killer(Agent):
 
     def heuristic(self, node, crewmates_locations, remaining_crewmates):
         surviving_crewmates = list.copy(crewmates_locations)
-        print(len(surviving_crewmates))
 
         distances = []
 
         for crewmate_location in surviving_crewmates:
-            print(crewmate_location)
+            #print(crewmate_location)
+            #print(node)
             distances.append(abs(crewmate_location[0] - node[0]) + abs(crewmate_location[1] - node[1]))
     
         #Goal state achieved if no crewmates remain

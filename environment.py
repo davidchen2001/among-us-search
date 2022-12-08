@@ -115,6 +115,7 @@ class Graph:
         locations = []
 
         for i in range(len(self.agents)):
+            #print(self.agents[i].getNode())
             locations.append(self.agents[i].getNode())
 
         return locations
@@ -131,7 +132,7 @@ class Graph:
     def get_crewmate_at_location(self, node):
 
         for i in range(len(self.agents)):
-            if self.agents[i].getNode().get_loc() == node:
+            if self.agents[i].getNode() == node:
                 return self.agents[i]
         
         return False 

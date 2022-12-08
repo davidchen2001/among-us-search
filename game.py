@@ -6,15 +6,17 @@ import random
 
 def initialize_crewmates(data, grid, num_crewmates):
     n,d = data.shape
+    
     crewmates = []
 
     for i in range(num_crewmates):
-        x = random.randint(0, n)
-        y = random.randint(0, d)
-
-        start_node = grid.get_node((x,y))
+       
+        start_node = grid.get_node((1,1))
+        task_locations = grid.get_task_cords()
 
         crewmates.append(Crewmate(start_node))
+        crewmates[i].append_to_queue([start_node.get_loc(), list.copy(task_locations), 0, [], None])
+        crewmates[i].setNode(start_node.get_loc())
     
     return crewmates
 
@@ -57,6 +59,7 @@ def killer_traversal(killer_queue, grid, remaining_crewmates, killer_explored, k
         return False
                 
     currNode = killer_queue.pop()
+    killer.setNode(currNode[0])
     node_information = grid.get_node(str(currNode[0]))
 
     #Check if killer collided with crewmate
@@ -115,29 +118,22 @@ def killer_traversal(killer_queue, grid, remaining_crewmates, killer_explored, k
 def pathfinding(input, num_crewmates, function):
 
     data = load_data(input)
-    n,d = data.shape
 
     grid = Graph(data)
 
-    task_locations = grid.get_task_cords()
-
     remaining_crewmates = num_crewmates
-    start_node = grid.get_node((2,1))
     crewmates = initialize_crewmates(data, grid, remaining_crewmates)
-    killer = initialize_killer(start_node)
-
+    
     grid.set_agents(crewmates)
 
     crewmate_locations = grid.get_crewmate_locations()
-
-    for crewmate in crewmates:
-
-        crewmate.append_to_queue([start_node.get_loc(), list.copy(task_locations), 0, [], None])
 
     killer_queue = PriorityQueue()
     killer_explored = []
     killer_path = []
     start_node = grid.get_node((0,0))
+    killer = initialize_killer(start_node)
+
     killer_queue.add([start_node.get_loc(), list.copy(crewmate_locations), 0, [], None])
 
     while True:
@@ -145,7 +141,6 @@ def pathfinding(input, num_crewmates, function):
 
         if len(crewmates) == 0:
             currNode = killer_queue.pop()
-
             optimal_path_cost = currNode[2]
             killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
             return killer_optimal_path, optimal_path_cost, "killer wins", grid.get_agents_death()
@@ -158,8 +153,10 @@ def pathfinding(input, num_crewmates, function):
                 return False 
                 
             currNode = crewmate.pop_from_queue()
+            crewmate.setNode(currNode[0])
             node_information = grid.get_node(str(currNode[0]))
 
+            #Remove task if agent has completed it
             if (currNode[0] in grid.get_task_cords()):
                 grid.remove_task_cords(currNode[0])
                 
