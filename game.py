@@ -194,8 +194,6 @@ def pathfinding(input, num_crewmates, function):
                             fn = curr_path_cost + killer.heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
                         elif function == "hn":
                             fn = killer.heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
-                        elif function == "gn":
-                            fn = curr_path_cost
 
                         neighbour.append(fn)
 
@@ -245,9 +243,7 @@ def pathfinding(input, num_crewmates, function):
                         if function == "fn":
                             fn = curr_path_cost + crewmates[i].heuristic(neighbour[0], grid.get_task_cords())
                         elif function == "hn":
-                            fn = crewmates[i].heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
-                        elif function == "gn":
-                            fn = curr_path_cost
+                            fn = crewmates[i].heuristic(neighbour[0], grid.get_crewmate_locations())
 
                         neighbour.append(fn)
 
