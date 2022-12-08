@@ -102,7 +102,7 @@ def killer_traversal(killer_queue, grid, remaining_crewmates, killer_explored, k
                     fn
                 )
 
-def pathfinding(input):
+def pathfinding(input, num_crewmates, function):
 
     data = load_data(input)
     grid = Graph(data)
@@ -111,7 +111,7 @@ def pathfinding(input):
     crewmates_queues = []
     crewmates_explored = []
     crewmates_path = []
-    remaining_crewmates = 4
+    remaining_crewmates = num_crewmates
     start_node = grid.get_node((1,0))
     crewmates = initialize_crewmates(start_node, remaining_crewmates)
     killer = initialize_killer(start_node)
@@ -190,7 +190,13 @@ def pathfinding(input):
                     or (curr_path_cost < old_path_cost)):
                         #Calculate f(n) of current location+treasure_state
                         
-                        fn = curr_path_cost + killer.heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
+                        if function == "fn":
+                            fn = curr_path_cost + killer.heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
+                        elif function == "hn":
+                            fn = killer.heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
+                        elif function == "gn":
+                            fn = curr_path_cost
+
                         neighbour.append(fn)
 
                         #Add to priority queue, with fn defining it's priority
@@ -235,7 +241,14 @@ def pathfinding(input):
                     if (([neighbour[0], grid.get_task_cords()] not in crewmates_explored[i]) 
                     or (curr_path_cost < old_path_cost)):
                         #Calculate f(n) of current location+treasure_state
-                        fn = curr_path_cost + crewmates[i].heuristic(neighbour[0], grid.get_task_cords())
+
+                        if function == "fn":
+                            fn = curr_path_cost + crewmates[i].heuristic(neighbour[0], grid.get_task_cords())
+                        elif function == "hn":
+                            fn = crewmates[i].heuristic(neighbour[0], grid.get_crewmate_locations(), remaining_crewmates)
+                        elif function == "gn":
+                            fn = curr_path_cost
+
                         neighbour.append(fn)
 
                         #Add to priority queue, with fn defining it's priority

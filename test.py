@@ -1,9 +1,13 @@
 from game import pathfinding
 
-print(pathfinding("./Maps/Polus.csv"))
-print(pathfinding("./Maps/Skeld.csv"))
-print(pathfinding("./Maps/Test0.csv"))
-print(pathfinding("./Maps/Test1.csv"))
-print(pathfinding("./Maps/Test2.csv"))
-print(pathfinding("./Maps/Test3.csv"))
-print(pathfinding("./Maps/Test0.csv"))
+#fn f(n)= g(n) + h(n)
+#gn f(n)= g(n)
+#hn f(n)= h(n)
+
+print(pathfinding("./Maps/Polus.csv", 4, "fn"))
+print(pathfinding("./Maps/Skeld.csv", 4, "fn"))
+print(pathfinding("./Maps/Test0.csv", 4, "fn"))
+print(pathfinding("./Maps/Test1.csv", 4, "fn"))
+print(pathfinding("./Maps/Test2.csv", 4, "fn"))
+print(pathfinding("./Maps/Test3.csv", 4, "fn"))
+print(pathfinding("./Maps/Test0.csv", 4, "fn"))
