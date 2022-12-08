@@ -21,7 +21,7 @@ class Crewmate(Agent):
     def heuristic(self, node, tasks):
         new_tasks = list.copy(tasks)
 
-        #if self.currNode in new_tasks:
+        #if node in new_tasks:
             #new_tasks.remove(node)
 
         distances = []

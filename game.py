@@ -42,8 +42,10 @@ def getPath(currNode, paths, cost):
     parent = currNode[3]
     #Loops through nodes in path, searching for the parent nodes parent to create a path
     while countdown > 0:
+
         for x in paths:
-            if x[0] == parent[0] and x[1] == parent[1] and x[2] == countdown-1:
+
+            if x[0] == parent[0] and x[2] == countdown-1:
                 final_path.append(x[0])
                 parent = x[3]
                 countdown -=1
@@ -74,10 +76,10 @@ def killer_traversal(killer_queue, grid, remaining_crewmates, killer_explored, k
                 remaining_crewmates -= 1
                 break 
         
-        if remaining_crewmates == 0:
-            optimal_path_cost = currNode[2]
-            killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
-            return killer_optimal_path, optimal_path_cost, "killer wins"
+        #if remaining_crewmates == 0:
+         #   optimal_path_cost = currNode[2]
+          #  killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
+           # return killer_optimal_path, optimal_path_cost, "killer wins"
 
         killer_explored.append([currNode[0], list.copy(grid.get_crewmate_locations())])
         killer_path.append(currNode)
@@ -142,6 +144,8 @@ def pathfinding(input, num_crewmates, function):
         if len(crewmates) == 0:
             currNode = killer_queue.pop()
             optimal_path_cost = currNode[2]
+            #print(killer_path)
+            #print("NEW LINE")
             killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
             return killer_optimal_path, optimal_path_cost, "killer wins", grid.get_agents_death()
 

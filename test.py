@@ -4,10 +4,10 @@ from game import pathfinding
 #hn f(n)= h(n)
 
 print(pathfinding("./Maps/Polus.csv", 4, "fn")) #Killer wins
-#print(pathfinding("./Maps/Polus.csv", 4, "hn"))
+print(pathfinding("./Maps/Polus.csv", 4, "hn")) #Killer wins but cost is higher
 
 print(pathfinding("./Maps/Skeld.csv", 4, "fn")) #Crewmates win
-#print(pathfinding("./Maps/Skeld.csv", 4, "hn"))
+print(pathfinding("./Maps/Skeld.csv", 4, "hn")) #Killer wins
 
 print(pathfinding("./Maps/Test0.csv", 4, "fn")) #Crewmate wins
 print(pathfinding("./Maps/Test0.csv", 4, "hn")) #Killer wins
