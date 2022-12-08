@@ -101,13 +101,13 @@ def pathfinding(input):
                         crewmate_at_location.set_alive(False)
                         grid.remove_agent(crewmate_at_location)
                         remaining_crewmates -= 1
+                        grid.append_crewmates_death(grid.get_crewmate_locations()[j])
                         break 
 
                 if remaining_crewmates == 0:
                     optimal_path_cost = currNode[2]
-                    killer_optimal_path = killer_path
-                    #killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
-                    return killer_path, optimal_path_cost, "killer wins"
+                    killer_optimal_path = getPath(currNode, killer_path, optimal_path_cost)
+                    return killer_optimal_path, optimal_path_cost, "killer wins"
 
                 killer_explored.append([currNode[0], list.copy(grid.get_crewmate_locations())])
                 killer_path.append(currNode)
@@ -152,7 +152,7 @@ def pathfinding(input):
                     grid.remove_task_cords(currNode[0])
                 
                 if len(grid.get_task_cords()) == 0:
-                    return "crewmate wins"
+                    return "crewmate wins", grid.get_agents_death()
 
                 crewmates_explored[i].append([currNode[0], list.copy(grid.get_task_cords())])
                 currNode[1] = list.copy(grid.get_task_cords())

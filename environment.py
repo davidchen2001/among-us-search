@@ -63,6 +63,7 @@ class Graph:
         self.height = d             #Gets height of matrix
         self.task_cords = []
         self.agents = []
+        self.agents_death = []
 
         #Get location information to create Nodes for the Graph, i.e neighbours of location, location value
         for x, y in np.ndindex(matrix.shape):
@@ -134,3 +135,11 @@ class Graph:
                 return self.agents[i]
         
         return False 
+    
+    def append_crewmates_death(self, loc):
+        self.agents_death.append("1 crewmate died at (" + str(loc[0]) + ", " + str(loc[1]) + ")")
+    
+    def get_agents_death(self):
+        return self.agents_death
+
+
