@@ -3,10 +3,10 @@ from player import Crewmate, Killer
 
 import numpy as np
 
-def initialize_crewmates(node):
+def initialize_crewmates(node, num_crewmates):
     crewmates = []
 
-    for i in range(4):
+    for i in range(num_crewmates):
         crewmates.append(Crewmate(node))
     
     return crewmates
@@ -113,7 +113,7 @@ def pathfinding(input):
     crewmates_path = []
     remaining_crewmates = 4
     start_node = grid.get_node((1,0))
-    crewmates = initialize_crewmates(start_node)
+    crewmates = initialize_crewmates(start_node, remaining_crewmates)
     killer = initialize_killer(start_node)
 
     grid.set_agents(crewmates)
