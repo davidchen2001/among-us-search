@@ -1,1 +1,1 @@
-Determining the best path for the imposters in Among Us with A* Search 
+Determining the best path for the imposters to kill crewmates in Among Us with A* Search
