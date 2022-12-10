@@ -1,1 +1,3 @@
-Multi-agent pathfinding problem with A* Search: Finding the best path for the imposters to kill crewmates in Among Us
+Finding the best path for the imposters to kill crewmates in Among Us
+
+A Multi-Agent Pathfinding Problem with A* Search 
