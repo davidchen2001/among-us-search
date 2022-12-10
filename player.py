@@ -4,7 +4,7 @@ class Agent:
     def __init__(self, node):
         self.currNode = node
     
-    def getNode(self):
+    def get_node(self):
         return self.currNode
 
     def setNode(self, node):
@@ -36,8 +36,8 @@ class Crewmate(Agent):
         #return h(n) = #of tasks remaining + mininimum manhattan
         return len(new_tasks) + min(distances)
     
-    def getNode(self):
-        return Agent.getNode(self)
+    def get_node(self):
+        return Agent.get_node(self)
 
     def get_alive(self):
         return self.alive
@@ -90,8 +90,8 @@ class Killer(Agent):
         #return h(n) = #of crewmates remaining + mininimum manhattan
         return remaining_crewmates + min(distances)
     
-    def getNode(self):
-        return Agent.getNode(self)
+    def get_node(self):
+        return Agent.get_node(self)
 
 
 
